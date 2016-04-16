@@ -25,7 +25,6 @@ Entity.prototype.preLoad = function() {
  * Kills the Entity
  */
 Entity.prototype.kill = function() {
-  // TODO remove sprite from screen iff on screen
   this._sprite.kill();
 }
 
@@ -125,4 +124,8 @@ Entity.prototype.hurt = function() {
       this.kill();
     }
   }
+}
+
+Entity.prototype.isDead = function() {
+  return !this._sprite.alive;
 }
