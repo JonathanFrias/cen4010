@@ -71,7 +71,7 @@ app.post('/at/index.html', urlParser, (req, res, next) => {
     res.end();
   });
 }).get('/', function(req, res, next) {
-  res.redirect(302, 'at/index.html');
+  res.redirect(302, 'at/signup.html');
   res.end();
 }).get('/hello', function(req, res, next) {
   res.write("Hello World. You're beautiful!");
