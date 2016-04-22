@@ -7,17 +7,20 @@ var elapsedTime,
   playAgain = false;
 
 var game = new Phaser.Game(width, height, Phaser.AUTO, 'meatpocalypse');
-var map, layer, player, timerText;
+var map, layer, player, timerText, victoryTimeText;
 
 var loadState = {
   preload: function() {
-    game.load.atlasJSONHash('highScore', '../images/mainMenuInverted.png', '../images/mainMenuInverted.json');	
-    game.load.atlasJSONHash('quit', '../images/mainMenuInverted.png', '../images/mainMenuInverted.json');	
-    game.load.atlasJSONHash('play', '../images/mainMenuInverted.png', '../images/mainMenuInverted.json');	
-    game.load.atlasJSONHash('yesNo', '../images/yesNoButtons.png', '../images/yesNoButtons.json');	
-    game.load.image('background', '../images/mainMenu.png');	
-    game.load.image('death', '../images/gameOver.png');	
-    game.load.image('name', '../images/Meatpocalypse.png');	
+    game.load.atlasJSONHash('highScore', './assets/images/mainMenuInverted.png', './assets/images/mainMenuInverted.json');	
+    game.load.atlasJSONHash('quit', './assets/images/mainMenuInverted.png', './assets/images/mainMenuInverted.json');	
+    game.load.atlasJSONHash('play', './assets/images/mainMenuInverted.png', './assets/images/mainMenuInverted.json');	
+    game.load.atlasJSONHash('yesNo', './assets/images/yesNoButtons.png', './assets/images/yesNoButtons.json');	
+    game.load.atlasJSONHash('MainMenu', './assets/images/menuButtons.png', './assets/images/menuButtons.json');	
+    game.load.image('background', './assets/images/MainMenu.png');	
+    game.load.image('death', './assets/images/gameOver.png');	
+    game.load.image('name', './assets/images/Meatpocalypse.png');	
+    game.load.image('instructions', './assets/images/instructions.png');	
+    game.load.image('victory', './assets/images/victory.png');	
   },
   create: function() {
     game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -29,12 +32,18 @@ var loadState = {
 var mainMenu = {
   create: function() {
     image = game.add.image(0, 0, 'background');
+    console.log(image);
     quit = game.add.button(675, 150, 'quit', quitClick, this, 'RQuit.png', 'WQuit.png', 'RQuit.png');
     play_button = game.add.button(50, 160, 'play', playClick, this, 'RPlayButton.png', 'WPlay.png', 'RPlayButton.png');
     highScore_button = game.add.button(250, 395, 'highScore', hsClick, this, 'WRHS.png', 'RWHS.png', 'WRHS.png');
+    instruction_button = game.add.button(650, 500, 'MainMenu', instructClick, this, 'instructionsR.png', 'instructionsW.png', 'instructionsR.png');
 
     function playClick() {
       game.state.start('play');
+    }
+
+    function instructClick() {
+      game.state.start('instructionScreen');
     }
 		
     function hsClick() {
@@ -58,28 +67,46 @@ var deathScreen = {
     death.scale.set(1, 1);
 
     function yesClick() {
-      //Write to the database here
       playAgain = true;
       game.state.start('sendStats');
     }
 		
     function noClick() {
-      //Write to the database here
       playAgain = false;
       game.state.start('sendStats');
     }
   }
 };
 
+var instructionScreen = {
+  create: function() {
+    game.add.image(game.world.centerX, game.world.centerY, 'instructions').anchor.set(0.5);
+    menu_button = game.add.button(750, 600, 'MainMenu', menuClick, this, 'mainMenuR.png', 'mainMenuW.png', 'mainMenuR.png');
+
+    function menuClick() {
+      game.state.start('mainMenu');
+    }
+   }
+} 
+
 var victoryScreen = {
   create: function() {
-    game.add.image(game.world.centerX, game.world.centerY, 'death').anchor.set(0.5);
-    quit = game.add.button(675, 150, 'quit', quitClick, this, 'RQuit.png', 'WQuit.png', 'RQuit.png');
-    play_button = game.add.button(50, 160, 'play', actionOnClick, this, 'RPlayButton.png', 'WPlay.png', 'RPlayButton.png');
-    highScore_button = game.add.button(250, 395, 'highScore', hsClick, this, 'WRHS.png', 'RWHS.png', 'WRHS.png');
+    image = game.add.image(0, 0, 'victory');
+    game.add.button(30, 155, 'MainMenu', play, this, 'playAgainWR.png', 'playAgainRW.png', 'playAgainWR.png');
+    game.add.button(675, 165, 'MainMenu', mainMenu, this, 'mainMenuWR.png', 'mainMenuRW.png', 'mainMenuWR.png');
+    victoryTimeText = game.add.text(400, 13 * 32, 'Time: ', { font: "18px Arial", fill: "#ffffff", align: "left"});
+    victoryTimeText.text = 'Time: ' + elapsedTime;
     victory = 1;
-    playAgain = false;
-    game.state.start('sendStats');
+
+    function mainMenu() {
+      playAgain = false;
+      game.state.start('sendStats');
+    }
+
+    function play() {
+      playAgain = true;
+      game.state.start('sendStats');
+    }
   }
 };
 
@@ -125,7 +152,6 @@ var playState = {
 
 var sendStats = {
   create: function() {
-    //Send xmlhttprequest
     var xhr = new XMLHttpRequest();
     var stats = player.getStats();
     stats.victory = victory;
@@ -133,7 +159,7 @@ var sendStats = {
     if (playAgain) {
       game.state.start('play');
     } else {
-      game.state.start('mainMenu');
+      location.reload();
     }
   }
 }
@@ -158,6 +184,8 @@ game.state.add('play', playState);
 game.state.add('deathScreen', deathScreen);
 game.state.add('victoryScreen', victoryScreen);
 game.state.add('sendStats', sendStats);
+game.state.add('instructionScreen', instructionScreen);
+game.state.add('victoryScreen', victoryScreen);
 
 game.getElapsedTime = function() {
   return elapsedTime;

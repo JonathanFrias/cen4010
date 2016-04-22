@@ -5,7 +5,8 @@ var Enemy = function(game, name, health, attackRange, walkSpeed, patrolRange, st
   this._STATES = {
     IDLE: 0,
     PATROL: 1,
-    ATTACK: 2
+    ATTACK: 2,
+    CINEMATIC: 3
   };
   this._state = this._STATES.IDLE;
   this._direction = startingDir || 'left';
@@ -38,10 +39,10 @@ Enemy.prototype.update = function() {
  * Sets a collision with the ranged enemy and the player
  */
 Enemy.prototype.setCollisionWithPlayer = function(player) {
-  var onCollision = function(player_sprite, enemy_sprite) {
+  var onOverlap = function(player_sprite, enemy_sprite) {
      player.hurt();
   };
-  this._game.physics.arcade.collide(player.getSprite(), this._sprite, onCollision);
+  this._game.physics.arcade.overlap(player.getSprite(), this._sprite, onOverlap);
 }
 
 /**
