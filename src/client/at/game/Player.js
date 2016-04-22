@@ -59,8 +59,8 @@ Player.prototype.create = function(x, y) {
   // follow the player
   this._game.camera.follow(this._sprite);
 
-  this._godButton = this._game.input.keyboard.addKey(Phaser.Keyboard.D);
-  this._godButton.onDown.add(this._godMode, this);
+  //this._godButton = this._game.input.keyboard.addKey(Phaser.Keyboard.D);
+  //this._godButton.onDown.add(this._godMode, this);
 
   this._cursors = this._game.input.keyboard.createCursorKeys();
   this._attackButton = this._game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);

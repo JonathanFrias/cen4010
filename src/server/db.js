@@ -150,14 +150,14 @@ module.exports = {
     "select " +
       "players.username, " +
       "playerStatistics.playerid, " +
-      "playerStatistics.time " +
+      "playerStatistics.score " +
     "from playerStatistics " +
     "join players on players.playerid = playerStatistics.playerid "
     if(username) {
       // sql injection!
       sql += "where username = '"+username+"' "
     }
-    sql += "order by time asc " +
+    sql += "order by score desc " +
     "limit 50; ";
 
     db.each(sql, callback, onComplete);

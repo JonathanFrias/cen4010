@@ -1,7 +1,7 @@
 function updateHighScore(username) {
   var header = "<tr>" +
       "<th>Player Name</th>" +
-      "<th>Time (seconds) </th>"+
+      "<th>Score</th>"+
     "</tr>";
   $("#highScoreTable").html(header);
   $.get('/highScore?username='+username, function(data) {
@@ -14,7 +14,7 @@ function updateHighScore(username) {
                     "</a>" +
                   "</td>" +
                   "<td>" +
-                    it.time.toFixed(2) +
+                    it.score +
                   "</td>" +
                 "</tr>");
     });
