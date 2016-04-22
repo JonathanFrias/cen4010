@@ -7,7 +7,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
   <script src="highScore.js"></script>
   <style>
-    a {
+    #menu {
       float: right;
     }
   </style>
@@ -16,11 +16,11 @@
   <h1 id="stats">Meatpocalypse Leaderboard</h1>
 
   <input type="text" name="username" id="username">
-  <a href="/at/game.html">Main Menu</a>
+  <a href="/at/game.html" id="menu">Main Menu</a>
   <br>
   <button id="search" type="button">Search</button>
 
-  <table id="highScoreTable" border='1' class='table'>
+  <table id="highScoreTable" border='1' class='table' align='left'>
     <tr>
       <th>Player Name</th>
       <th>Time</th>
